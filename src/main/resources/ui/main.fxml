@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.InnerShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="draylar.timechart.controller.MainController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" percentHeight="50" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" percentHeight="38" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" percentHeight="12" prefHeight="30.0" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;">
+               <children>
+                  <Label fx:id="working_label" text="You are not currently working.">
+                     <font>
+                        <Font name="Segoe UI" size="20.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="25.0" />
+                     </VBox.margin>
+                  </Label>
+                  <StackPane fx:id="toggle" maxWidth="150.0" prefHeight="89.0" prefWidth="150.0">
+                     <children>
+                        <Region fx:id="toggle_background" maxHeight="75.0" maxWidth="175.0" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: #D9D9D9; -fx-background-radius: 45;">
+                           <cursor>
+                              <Cursor fx:constant="OPEN_HAND" />
+                           </cursor>
+                           <effect>
+                              <DropShadow blurType="GAUSSIAN" height="9.675" offsetX="3.0" offsetY="3.0" radius="3.9087500000000004" width="7.96">
+                                 <color>
+                                    <Color red="0.5921052694320679" green="0.5921052694320679" blue="0.5921052694320679" opacity="0.5600000023841858" />
+                                 </color>
+                              </DropShadow>
+                           </effect>
+                        </Region>
+                        <Region fx:id="toggle_circle" maxHeight="65.0" maxWidth="65.0" prefHeight="75.0" prefWidth="75.0" style="-fx-background-color: white; -fx-background-radius: 45;" StackPane.alignment="CENTER_LEFT">
+                           <effect>
+                              <DropShadow offsetX="3.0" offsetY="3.0" radius="4.75" width="0.0">
+                                 <color>
+                                    <Color red="0.41999998688697815" green="0.41999998688697815" blue="0.41999998688697815" opacity="0.708695650100708" />
+                                 </color>
+                              </DropShadow>
+                           </effect>
+                           <StackPane.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </StackPane.margin>
+                           <cursor>
+                              <Cursor fx:constant="CLOSED_HAND" />
+                           </cursor>
+                        </Region>
+                     </children>
+                  </StackPane>
+               </children>
+            </VBox>
+            <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1">
+               <children>
+                  <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #FCFCFC;">
+                     <effect>
+                        <InnerShadow offsetY="3.0">
+                           <color>
+                              <Color red="0.8684210777282715" green="0.8603801131248474" blue="0.8603801131248474" />
+                           </color>
+                        </InnerShadow>
+                     </effect>
+                  </Region>
+                  <BarChart fx:id="chart" maxHeight="182.0" maxWidth="304.0" prefHeight="182.0" prefWidth="304.0" style="-fx-background-color: #FCFCFC;">
+                    <xAxis>
+                      <CategoryAxis side="BOTTOM" />
+                    </xAxis>
+                    <yAxis>
+                      <NumberAxis side="LEFT" />
+                    </yAxis>
+                  </BarChart>
+               </children>
+            </StackPane>
+         </children>
+      </GridPane>
+      <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: white;" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+         <children>
+            <Label opacity="0.6" text="timechart">
+               <HBox.margin>
+                  <Insets left="24.0" top="16.0" />
+               </HBox.margin>
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+            <ImageView fitHeight="40.0" fitWidth="40.0" opacity="0.85" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../Downloads/GitHub-Mark.png" />
+               </image>
+               <HBox.margin>
+                  <Insets right="15.0" top="12.0" />
+               </HBox.margin>
+            </ImageView>
+         </children>
+      </HBox>
+      <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.rowIndex="1">
+         <children>
+            <Region prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #FBFBFB;">
+               <effect>
+                  <InnerShadow>
+                     <color>
+                        <Color red="0.6447368264198303" green="0.6447368264198303" blue="0.6447368264198303" />
+                     </color>
+                  </InnerShadow>
+               </effect>
+            </Region>
+            <GridPane>
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Text fill="#474747" strokeType="OUTSIDE" strokeWidth="0.0" text="Daily Hours">
+                           <font>
+                              <Font name="Segoe UI" size="20.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#707070" strokeType="OUTSIDE" strokeWidth="0.0" text="Since this morning">
+                           <font>
+                              <Font name="Segoe UI" size="20.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="5.0" top="5.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text fx:id="daily_time" strokeType="OUTSIDE" strokeWidth="0.0" text="5.6">
+                           <font>
+                              <Font name="Segoe UI" size="20.0" />
+                           </font>
+                        </Text>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                     <children>
+                        <Text fill="#474747" strokeType="OUTSIDE" strokeWidth="0.0" text="Weekly Hours">
+                           <font>
+                              <Font name="Segoe UI" size="20.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#707070" strokeType="OUTSIDE" strokeWidth="0.0" text="Since Monday">
+                           <font>
+                              <Font name="Segoe UI" size="20.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="5.0" top="5.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text fx:id="weekly_time" strokeType="OUTSIDE" strokeWidth="0.0" text="5.6">
+                           <font>
+                              <Font name="Segoe UI" size="20.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="2">
+                     <children>
+                        <Text fill="#474747" strokeType="OUTSIDE" strokeWidth="0.0" text="Progressive Hours">
+                           <font>
+                              <Font name="Segoe UI" size="20.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#707070" strokeType="OUTSIDE" strokeWidth="0.0" text="Over the past 7 days">
+                           <font>
+                              <Font name="Segoe UI" size="20.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="5.0" top="5.0" />
+                           </VBox.margin>
+                        </Text>
+                        <Text fx:id="progressive_time" strokeType="OUTSIDE" strokeWidth="0.0" text="5.6">
+                           <font>
+                              <Font name="Segoe UI" size="20.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </VBox>
+               </children>
+            </GridPane>
+         </children>
+      </StackPane>
+   </children>
+</GridPane>
