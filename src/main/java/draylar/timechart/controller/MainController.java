@@ -8,6 +8,8 @@ import javafx.geometry.Pos;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -27,6 +29,7 @@ public class MainController {
     @FXML public Text weekly_time;
     @FXML public Text progressive_time;
     @FXML public BarChart<String, Double> chart;
+    @FXML public ImageView github;
 
     public boolean tracking = false;
 
@@ -45,6 +48,8 @@ public class MainController {
                 working_label.setText("You are not currently working.");
             }
         });
+
+        github.setImage(new Image(Main.class.getClassLoader().getResource("github.png").toString()));
 
         // Bar chart setup
         // Collect time for the past 7 days

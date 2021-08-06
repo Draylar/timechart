@@ -38,4 +38,8 @@ jar {
 
 shadowJar {
     archiveFileName = "timechart-${version}.jar"
+    exclude "META-INF/*.SF"
+    exclude "META-INF/*.DSA"
+    exclude "META-INF/*.RSA"
+    exclude "META-INF/LICENSE"
 }
