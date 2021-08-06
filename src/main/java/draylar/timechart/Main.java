@@ -24,7 +24,10 @@ public class Main {
         // TODO: method this
         Calendar calendar = Calendar.getInstance();
         String date = String.format("%d/%d/%d", calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.YEAR));
-        SECONDS_TODAY = read.get(date);
+
+        if(read.containsKey(date)) {
+            SECONDS_TODAY = read.get(date);
+        }
 
         // Collect time for the previous week
         for(int i = 0; i < 7; i++) {
