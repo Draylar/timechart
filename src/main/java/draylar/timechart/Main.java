@@ -14,9 +14,10 @@ import java.util.Map;
 
 public class Main {
 
-    public static int SECONDS_TODAY = 0;
     public static int SECONDS_WEEKLY = 0;
     public static int SECONDS_PROGRESSIVE = 0;
+    public static int SECONDS_TODAY = 0;
+    public static int dayOfYear = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
 
     public static void main(String[] args) throws IOException, AWTException {
         // Read seconds from time.json

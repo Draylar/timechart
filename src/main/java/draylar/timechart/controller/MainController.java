@@ -49,6 +49,8 @@ public class MainController {
 
     @FXML
     public void initialize() {
+        today.getChildren().remove(weekly);
+
         today_select.setOnMouseClicked(event -> {
             today.getChildren().clear();
             today.getChildren().add(today_tasks);
@@ -103,20 +105,40 @@ public class MainController {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
+                // If the clock rolls over from 11:59 PM to 12:00 AM at midnight, reset timer
+                int day = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
+                if(day != Main.dayOfYear) {
+                    Main.dayOfYear = day;
+                    Main.SECONDS_TODAY = 0;
+                }
+
                 // Update UI
                 daily_time.setText(new Time(Main.SECONDS_TODAY).toFormatted());
                 weekly_time.setText(new Time(Main.SECONDS_WEEKLY).toFormatted());
                 progressive_time.setText(new Time(Main.SECONDS_PROGRESSIVE).toFormatted());
+                daily_time.setText("100h 0m 0s");
+                weekly_time.setText("100h 0m 0s");
+                progressive_time.setText("100h 0m 0s");
 
                 // Increment timers
                 if(tracking) {
                     Main.SECONDS_TODAY++;
                     Main.SECONDS_PROGRESSIVE++;
                     Main.SECONDS_WEEKLY++;
-                    FileHelper.saveDaily();
                 }
             }
         }, 0, 1000);
+
+        // Save every 10 seconds.
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if(tracking) {
+                    FileHelper.saveDaily();
+                }
+            }
+        }, 0, 10_000);
+
 
         // Populate daily tasks
         try {
@@ -192,9 +214,8 @@ public class MainController {
             List<Task> tasks = reference.getTask().getTasks();
             for (Task task : tasks) {
                 if(task.isComplete()) {
-                    Calendar calendar = reference.getDate();
-                    String fileName = new SimpleDateFormat("EEEE").format(calendar.get(Calendar.DAY_OF_WEEK));
-                    Label label = new Label(fileName + ": " + task.description());
+                    String nameOfDay = new SimpleDateFormat("EEEE").format(new Date());
+                    Label label = new Label(nameOfDay + ": " + task.description());
                     this.weekly.getChildren().add(label);
                 }
             }

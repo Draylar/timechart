@@ -72,6 +72,11 @@ public class FileHelper {
                 TaskDayReference read = TaskDayReference.read(calendar, file);
                 references.add(read);
             }
+
+            // Once we hit Saturday ("start" of a work week, assuming reporting is done Friday), stop counting
+            if(calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+                break;
+            }
         }
 
         return references;
