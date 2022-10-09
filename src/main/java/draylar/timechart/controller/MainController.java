@@ -2,22 +2,28 @@ package draylar.timechart.controller;
 
 import draylar.timechart.Main;
 import draylar.timechart.api.FileHelper;
+import draylar.timechart.api.Task;
+import draylar.timechart.api.TaskDayReference;
 import draylar.timechart.api.Time;
+import draylar.timechart.fx.TaskEntry;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import java.util.Calendar;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class MainController {
 
@@ -30,11 +36,29 @@ public class MainController {
     @FXML public Text progressive_time;
     @FXML public BarChart<String, Double> chart;
     @FXML public ImageView github;
+    @FXML public TextArea task_input;
+    @FXML public Button submit;
+    @FXML public VBox task_list;
+    @FXML public Button today_select;
+    @FXML public Button weekly_select;
+    @FXML public VBox today;
+    @FXML public VBox today_tasks;
+    @FXML public VBox weekly;
 
     public boolean tracking = false;
 
     @FXML
     public void initialize() {
+        today_select.setOnMouseClicked(event -> {
+            today.getChildren().clear();
+            today.getChildren().add(today_tasks);
+        });
+
+        weekly_select.setOnMouseClicked(event -> {
+            today.getChildren().clear();
+            today.getChildren().add(weekly);
+        });
+
         toggle.setOnMouseClicked(event -> {
             if(!tracking) {
                 StackPane.setAlignment(toggle_circle, Pos.CENTER_RIGHT);
@@ -58,7 +82,7 @@ public class MainController {
         chart.setBarGap(2);
         chart.getYAxis().setLabel("Hours");
 
-        for(int i = 6; i >= 0; i--) {
+        for (int i = 6; i >= 0; i--) {
             Calendar today = Calendar.getInstance();
             today.add(Calendar.DAY_OF_YEAR, -i);
             String pastDate = String.format("%d/%d/%d", today.get(Calendar.MONTH) + 1, today.get(Calendar.DAY_OF_MONTH), today.get(Calendar.YEAR));
@@ -93,5 +117,87 @@ public class MainController {
                 }
             }
         }, 0, 1000);
+
+        // Populate daily tasks
+        try {
+            TaskDayReference day = FileHelper.readDailyTaskData();
+            List<TaskDayReference> weekly = FileHelper.readWeekTasks();
+            refreshTaskListView(day);
+            refreshWeeklyLogView(weekly);
+
+            // Configure task submission event handlers to update TaskDayReference.
+            submit.setOnMouseClicked(event -> {
+                String value = task_input.getText();
+                if(!value.isEmpty()) {
+                    task_input.clear();
+                    Task task = new Task(false, value);
+
+                    // Save & re-serialize task data
+                    try {
+                        day.addTask(task);
+                        day.save();
+                    } catch (IOException exception) {
+                        exception.printStackTrace();
+                    }
+
+                    // Update UI based on data state
+                    addTaskElement(day, task);
+                }
+            });
+        } catch (IOException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    private void addTaskElement(TaskDayReference day, Task task) {
+        TaskEntry entry = new TaskEntry(task);
+        entry.getBox().selectedProperty().set(task.isComplete());
+        entry.onDelete(() -> {
+            try {
+                day.removeTask(task);
+                day.save();
+                refreshTaskListView(day);
+                refreshWeeklyLogView(FileHelper.readWeekTasks());
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        });
+
+        task_list.getChildren().add(entry);
+
+        // When the box is clicked (updated), serialize & re-load.
+        entry.getBox().selectedProperty().addListener((observable, oldValue, newValue) -> {
+            task.setComplete(newValue);
+
+            try {
+                day.save();
+                refreshWeeklyLogView(FileHelper.readWeekTasks());
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        });
+    }
+
+    private void refreshTaskListView(TaskDayReference day) {
+        task_list.getChildren().clear();
+        for (Task task : day.getTask().getTasks()) {
+            addTaskElement(day, task);
+            task_list.getChildren().add(new Separator());
+        }
+    }
+
+    private void refreshWeeklyLogView(List<TaskDayReference> weekly) {
+        this.weekly.getChildren().clear();
+        for (TaskDayReference reference : weekly) {
+            List<Task> tasks = reference.getTask().getTasks();
+            for (Task task : tasks) {
+                if(task.isComplete()) {
+                    Calendar calendar = reference.getDate();
+                    String fileName = new SimpleDateFormat("EEEE").format(calendar.get(Calendar.DAY_OF_WEEK));
+                    Label label = new Label(fileName + ": " + task.description());
+                    this.weekly.getChildren().add(label);
+                }
+            }
+        }
     }
 }
