@@ -9,6 +9,9 @@ group 'draylar'
 version '1.0.1'
 mainClassName = 'draylar.timechart.Main'
 
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
 repositories {
     mavenCentral()
 }
