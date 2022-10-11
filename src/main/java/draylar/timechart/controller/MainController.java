@@ -116,9 +116,6 @@ public class MainController {
                 daily_time.setText(new Time(Main.SECONDS_TODAY).toFormatted());
                 weekly_time.setText(new Time(Main.SECONDS_WEEKLY).toFormatted());
                 progressive_time.setText(new Time(Main.SECONDS_PROGRESSIVE).toFormatted());
-                daily_time.setText("100h 0m 0s");
-                weekly_time.setText("100h 0m 0s");
-                progressive_time.setText("100h 0m 0s");
 
                 // Increment timers
                 if(tracking) {
@@ -214,7 +211,7 @@ public class MainController {
             List<Task> tasks = reference.getTask().getTasks();
             for (Task task : tasks) {
                 if(task.isComplete()) {
-                    String nameOfDay = new SimpleDateFormat("EEEE").format(new Date());
+                    String nameOfDay = new SimpleDateFormat("EEEE").format(new Date(reference.getDate().getTimeInMillis()));
                     Label label = new Label(nameOfDay + ": " + task.description());
                     this.weekly.getChildren().add(label);
                 }
